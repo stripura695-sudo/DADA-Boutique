@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}যোগাযোগ — Dada Boys’ Wear{% endblock %}
+
+{% block content %}
+<header class="page-hero">
+    <div class="container reveal">
+        <p class="section-kicker mb-2">আমরা আছি পাশে</p>
+        <h1 class="section-heading mb-2">যোগাযোগ করুন</h1>
+        <p class="text-muted mb-0">পণ্য, অর্ডার বা ডেলিভারি নিয়ে প্রশ্ন থাকলে WhatsApp-এ লিখুন।</p>
+    </div>
+</header>
+<main class="container py-5">
+    <div class="row g-4">
+        <section class="col-md-7 reveal">
+            <div class="surface-card p-4 p-md-5 h-100">
+                <span class="trust-icon mb-3" aria-hidden="true">↗</span>
+                <h2 class="h4 fw-bold">WhatsApp-এ কথা বলুন</h2>
+                <p class="text-muted">দোকানের নম্বরে মেসেজ পাঠান—আমরা পণ্য ও অর্ডারের বিস্তারিত জানাব।</p>
+                <p class="fw-semibold">{{ whatsapp_phone }}</p>
+                <a class="btn btn-success px-4" href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer">WhatsApp খুলুন <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+        <aside class="col-md-5 reveal">
+            <div class="surface-card p-4 p-md-5 h-100">
+                <span class="section-kicker">অর্ডার সহায়তা</span>
+                <h2 class="h4 fw-bold mt-2">আমাদের কী জানাবেন?</h2>
+                <ul class="text-muted lh-lg ps-3 mb-0">
+                    <li>পণ্যের নাম</li>
+                    <li>আপনার অর্ডার নম্বর (যদি থাকে)</li>
+                    <li>আপনার প্রশ্ন বা প্রয়োজন</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}ডেলিভারি ও রিটার্ন — Dada Boys’ Wear{% endblock %}
+
+{% block content %}
+<header class="page-hero">
+    <div class="container reveal">
+        <p class="section-kicker mb-2">অর্ডারের আগে জেনে নিন</p>
+        <h1 class="section-heading mb-2">ডেলিভারি ও রিটার্ন</h1>
+        <p class="text-muted mb-0">অর্ডার নিশ্চিত করার আগে ডেলিভারি ও পণ্য ফেরতের শর্ত WhatsApp-এ জেনে নিন।</p>
+    </div>
+</header>
+<main class="container py-5">
+    <div class="row g-4">
+        <section class="col-md-6 reveal">
+            <article class="surface-card p-4 p-md-5 h-100" id="returns">
+                <span class="trust-icon mb-3" aria-hidden="true">01</span>
+                <h2 class="h4 fw-bold">অর্ডার ও ডেলিভারি</h2>
+                <p class="text-muted lh-lg mb-0">Checkout-এ আপনার নাম, ফোন ও ঠিকানা দিয়ে অর্ডার তৈরি করুন। এরপর WhatsApp-এ অর্ডারের বার্তা পাঠিয়ে দোকানের সঙ্গে অর্ডার ও ডেলিভারির তথ্য নিশ্চিত করুন। ডেলিভারি চার্জ ও পৌঁছানোর সময় ঠিকানা অনুযায়ী নিশ্চিত করা হবে। পেমেন্ট Cash on Delivery।</p>
+            </article>
+        </section>
+        <section class="col-md-6 reveal">
+            <article class="surface-card p-4 p-md-5 h-100">
+                <span class="trust-icon mb-3" aria-hidden="true">02</span>
+                <h2 class="h4 fw-bold">পণ্য ফেরত বা পরিবর্তন</h2>
+                <p class="text-muted lh-lg mb-0">ফেরত বা পরিবর্তনের নির্দিষ্ট শর্ত অর্ডারের আগে WhatsApp-এ জেনে নিন। পণ্য গ্রহণের পর কোনো সমস্যা থাকলে অর্ডার নম্বরসহ দ্রুত দোকানের সঙ্গে যোগাযোগ করুন।</p>
+            </article>
+        </section>
+    </div>
+    <div class="text-center mt-4 reveal">
+        <a href="{% url 'core:contact' %}" class="btn btn-dark px-4">প্রশ্ন আছে? যোগাযোগ করুন</a>
+    </div>
+</main>
+{% endblock %}

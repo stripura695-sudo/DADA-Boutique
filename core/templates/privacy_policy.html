@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}গোপনীয়তা নীতি — Dada Boys’ Wear{% endblock %}
+
+{% block content %}
+<header class="page-hero">
+    <div class="container reveal">
+        <p class="section-kicker mb-2">আপনার তথ্য</p>
+        <h1 class="section-heading mb-2">গোপনীয়তা নীতি</h1>
+        <p class="text-muted mb-0">অর্ডারের জন্য প্রয়োজনীয় তথ্য কীভাবে ব্যবহার হয়।</p>
+    </div>
+</header>
+<main class="container py-5">
+    <section class="surface-card p-4 p-md-5 reveal">
+        <h2 class="h4 fw-bold">অর্ডারের তথ্য</h2>
+        <p class="text-muted lh-lg">Checkout-এ দেওয়া আপনার নাম, ফোন নম্বর ও ঠিকানা অর্ডার তৈরি, অর্ডার-সংক্রান্ত যোগাযোগ এবং ডেলিভারির ব্যবস্থা করতে ব্যবহৃত হয়। অর্ডারের রেকর্ড দোকানের Admin-এ সংরক্ষিত থাকে।</p>
+
+        <h2 class="h5 fw-bold mt-4">WhatsApp ও তৃতীয় পক্ষ</h2>
+        <p class="text-muted lh-lg">WhatsApp-এ অর্ডার নিশ্চিত করতে গেলে আপনার বার্তা WhatsApp-এর সেবার মাধ্যমে পাঠানো হয় এবং তাদের নিজস্ব নীতি প্রযোজ্য। এই সাইটে বর্তমানে অনলাইন কার্ড বা mobile banking payment নেওয়া হয় না।</p>
+
+        <h2 class="h5 fw-bold mt-4">প্রশ্ন বা তথ্য সংশোধন</h2>
+        <p class="text-muted lh-lg mb-0">আপনার অর্ডারের তথ্য নিয়ে প্রশ্ন থাকলে অর্ডার নম্বরসহ আমাদের সঙ্গে যোগাযোগ করুন।</p>
+        <a href="{% url 'core:contact' %}" class="btn btn-dark px-4 mt-3">যোগাযোগ করুন</a>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} — Dada Boys’ Wear{% endblock %}
+
+{% block content %}
+<main class="container py-4 py-lg-5">
+    <nav aria-label="Breadcrumb" class="small text-muted mb-4 reveal">
+        <a href="{% url 'core:home' %}" class="text-decoration-none">হোম</a>
+        <span class="mx-2">/</span><a href="{% url 'core:shop_catalog' %}" class="text-decoration-none">সব পণ্য</a>
+        <span class="mx-2">/</span><span>{{ product.name }}</span>
+    </nav>
+    <div class="row g-4 g-lg-5 align-items-center">
+        <div class="col-lg-6 reveal">
+            <div class="detail-image-wrap">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="detail-image" alt="{{ product.name }}">
+                {% else %}
+                <div class="text-muted">DADA BOYS’ WEAR · {{ product.category }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <section class="col-lg-6 reveal">
+            <span class="eyebrow">DADA BOYS’ WEAR · {{ product.category }}</span>
+            <h1 class="display-5 fw-bold mt-3">{{ product.name }}</h1>
+            <p class="price-display my-3">৳ {{ product.price }}</p>
+            {% if product.discount_percentage %}<p class="small text-muted">আগের দাম: <del>৳ {{ product.compare_at_price }}</del> · {{ product.discount_percentage }}% ছাড়</p>{% endif %}
+            <dl class="product-spec-list">
+                {% if product.size %}<div><dt>Size</dt><dd>{{ product.size }}</dd></div>{% endif %}
+                {% if product.color %}<div><dt>Color</dt><dd>{{ product.color }}</dd></div>{% endif %}
+                {% if product.fit %}<div><dt>Fit</dt><dd>{{ product.fit }}</dd></div>{% endif %}
+                {% if product.fabrication %}<div><dt>Fabrication</dt><dd>{{ product.fabrication }}</dd></div>{% endif %}
+                {% if product.embellishments %}<div><dt>Details</dt><dd>{{ product.embellishments }}</dd></div>{% endif %}
+                {% if product.sleeve_length %}<div><dt>Sleeve length</dt><dd>{{ product.sleeve_length }}</dd></div>{% endif %}
+                {% if product.item_segment %}<div><dt>Item segment</dt><dd>{{ product.item_segment }}</dd></div>{% endif %}
+            </dl>
+            {% if product.stock %}
+            <p class="small text-success fw-semibold">● স্টকে আছে · {{ product.stock }}টি</p>
+            {% else %}
+            <p class="small text-danger fw-semibold">● এই মুহূর্তে স্টকে নেই</p>
+            {% endif %}
+            {% if product.description %}
+            <p class="text-muted lh-lg">{{ product.description }}</p>
+            {% else %}
+            <p class="text-muted lh-lg">এই পণ্য সম্পর্কে জানতে বা অর্ডারের আগে বিস্তারিত নিশ্চিত করতে আমাদের সঙ্গে যোগাযোগ করুন।</p>
+            {% endif %}
+            <div class="info-note rounded-3 p-3 small my-4">অর্ডারটি Cash on Delivery। Checkout-এর পর WhatsApp-এ বার্তাটি পাঠিয়ে অর্ডার নিশ্চিত করুন।</div>
+            {% if product.stock %}
+            <form method="post" action="{% url 'core:add_to_cart' product.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark btn-lg px-4">কার্টে যোগ করুন <span aria-hidden="true">→</span></button>
+            </form>
+            {% else %}
+            <button type="button" class="btn btn-secondary btn-lg px-4" disabled>স্টকে নেই</button>
+            {% endif %}
+            <a href="{% url 'core:contact' %}" class="d-inline-block small text-muted ms-3">প্রশ্ন আছে? যোগাযোগ করুন</a>
+        </section>
+    </div>
+</main>
+{% endblock %}

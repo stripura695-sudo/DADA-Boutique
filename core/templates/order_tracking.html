@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}অর্ডার {{ order.public_id }} — Dada Boys’ Wear{% endblock %}
+
+{% block content %}
+<header class="page-hero">
+    <div class="container reveal">
+        <p class="section-kicker mb-2">ধন্যবাদ · DADA BOYS’ WEAR</p>
+        <h1 class="section-heading mb-0">আপনার অর্ডার তৈরি হয়েছে</h1>
+    </div>
+</header>
+
+<main class="container py-5">
+    <div class="row justify-content-center g-4 align-items-start">
+        <section class="col-lg-7 reveal">
+            <div class="surface-card p-4 p-md-5">
+                <span class="order-status">{{ order.get_status_display }}</span>
+                <p class="text-muted mt-4 mb-1">অর্ডার নম্বর</p>
+                <p class="fw-semibold"><code>{{ order.public_id }}</code></p>
+                <p class="text-muted">অর্ডারের সময়: {{ order.created_at|date:"d M Y, h:i A" }}</p>
+                <div class="info-note rounded-3 p-3 small my-4">Cash on Delivery অর্ডার নিশ্চিত করতে WhatsApp-এ নিচের বার্তাটি পাঠান। অর্ডারের অবস্থা দেখতে এই ব্যক্তিগত লিংকটি সংরক্ষণ করুন।</div>
+                <a class="btn btn-success btn-lg w-100" href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer">WhatsApp-এ অর্ডার নিশ্চিত করুন <span aria-hidden="true">↗</span></a>
+                <p class="small text-muted mt-3 mb-0">এই পেজের লিংকটি ব্যক্তিগত। অন্যদের সঙ্গে শেয়ার করবেন না।</p>
+            </div>
+        </section>
+        <aside class="col-lg-5 reveal">
+            <div class="surface-card p-4">
+                <p class="section-kicker mb-2">Order summary</p>
+                <h2 class="h5 fw-bold mb-4">পণ্যের তালিকা</h2>
+                {% for item in order.items.all %}
+                <div class="d-flex justify-content-between gap-3 mb-3">
+                    <span>{{ item.product_name }} × {{ item.quantity }}</span><strong>৳ {{ item.line_total }}</strong>
+                </div>
+                {% endfor %}
+                <hr>
+                <div class="d-flex justify-content-between fw-bold fs-5">
+                    <span>Cash on Delivery</span><span>৳ {{ order.total }}</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+{% endblock %}

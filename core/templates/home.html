@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}{% if query %}{{ query }} — {% endif %}Dada Boys’ Wear | Boys’ Clothing{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+{% endblock %}
+
+{% block content %}
+{% if products %}
+<section class="hero">
+    <div class="container">
+        <div class="swiper puffyHero">
+            <div class="swiper-wrapper">
+                {% for product in products %}
+                <article class="swiper-slide">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-6 hero-copy">
+                            <span class="eyebrow">নতুন সিজন · DADA BOYS’ WEAR</span>
+                            <h1 class="hero-title">ঠান্ডায় থাকুন <span>স্টাইলিশ।</span></h1>
+                            <p class="hero-description">{{ product.description|default:"আপনার প্রতিদিনের লুকে যোগ করুন আরাম, উষ্ণতা আর নিজের স্টাইল।"|truncatechars:130 }}</p>
+                            <p class="hero-slide-product">{{ product.name }} <span>·</span> ৳ {{ product.price }}</p>
+                            <div class="d-flex flex-wrap align-items-center gap-3 mt-4">
+                                <a href="{% url 'core:product_detail' product.pk %}" class="btn btn-dark btn-lg px-4">পণ্যটি দেখুন <span aria-hidden="true">→</span></a>
+                                <span class="small text-muted">{% if product.stock %}স্টকে আছে · {{ product.stock }}টি{% else %}বর্তমানে স্টকে নেই{% endif %}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 hero-visual">
+                            {% if product.image %}
+                            <img class="hero-product-image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                            <div class="hero-product-image d-flex align-items-center justify-content-center rounded-5 bg-white text-muted">DADA BOYS’ WEAR · NEW SEASON</div>
+                            {% endif %}
+                            <div class="hero-price"><span>{{ product.name }}</span><span class="text-muted">·</span><span>৳ {{ product.price }}</span></div>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% if products|length > 1 %}
+            <button class="hero-slider-button hero-slider-prev" type="button" aria-label="আগের পণ্য">←</button>
+            <button class="hero-slider-button hero-slider-next" type="button" aria-label="পরের পণ্য">→</button>
+            <div class="hero-slider-pagination"></div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="hero">
+    <div class="container py-4 text-center">
+        <span class="eyebrow">DADA BOYS’ WEAR · CLOTHING</span>
+        <h1 class="hero-title mx-auto">{% if query %}পণ্যটি <span>খুঁজে পাওয়া যায়নি।</span>{% else %}শিগগিরই আসছে <span>নতুন কালেকশন।</span>{% endif %}</h1>
+        <p class="hero-description mx-auto">অন্য নামে খুঁজুন, অথবা নতুন পণ্য দেখতে পরে আবার আসুন।</p>
+        {% if query %}<a href="{% url 'core:shop_catalog' %}" class="btn btn-dark px-4 mt-2">সব পণ্য দেখুন</a>{% endif %}
+    </div>
+</section>
+{% endif %}
+
+<section class="trust-strip" aria-label="অর্ডারের সুবিধা">
+    <div class="container">
+        <div class="row g-2">
+            <div class="col-12 col-md-4 trust-item"><span class="trust-icon" aria-hidden="true">✦</span><span>ছেলেদের পোশাকের কালেকশন</span></div>
+            <div class="col-12 col-md-4 trust-item"><span class="trust-icon" aria-hidden="true">৳</span><span>Cash on Delivery অর্ডার</span></div>
+            <div class="col-12 col-md-4 trust-item"><span class="trust-icon" aria-hidden="true">↗</span><span>WhatsApp-এ অর্ডার নিশ্চিতকরণ</span></div>
+        </div>
+    </div>
+</section>
+
+<main class="container py-5 my-lg-4" id="products">
+    <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4 reveal">
+        <div>
+            <p class="section-kicker mb-2">{% if query %}আপনার অনুসন্ধান{% else %}নতুন কালেকশন{% endif %}</p>
+            <h2 class="section-heading mb-0">{% if query %}Search results{% else %}নিজের পছন্দটি খুঁজে নিন{% endif %}</h2>
+        </div>
+        <span class="text-muted small">{{ products|length }}টি পণ্য</span>
+    </div>
+
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-6 col-lg-4 reveal">
+            <article class="product-card">
+                <a class="product-image-wrap d-block" href="{% url 'core:product_detail' product.pk %}" aria-label="{{ product.name }} বিস্তারিত">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}" loading="lazy">
+                    {% else %}
+                    <div class="product-image d-flex align-items-center justify-content-center text-muted">DADA BOYS’ WEAR</div>
+                    {% endif %}
+                    {% if product.stock %}
+                    <span class="stock-pill">স্টকে আছে</span>
+                    {% else %}
+                    <span class="stock-pill out">স্টকে নেই</span>
+                    {% endif %}
+                </a>
+                <div class="card-body">
+                    <h3 class="product-name mb-2">{{ product.name }}</h3>
+                    {% if product.description %}<p class="small text-muted mb-3">{{ product.description|truncatechars:76 }}</p>{% endif %}
+                    <p class="product-price mb-3">৳ {{ product.price }}</p>
+                    <div class="product-actions">
+                        <a href="{% url 'core:product_detail' product.pk %}" class="btn btn-outline-dark">বিস্তারিত দেখুন</a>
+                        {% if product.stock %}
+                        <form method="post" action="{% url 'core:add_to_cart' product.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-dark w-100">কার্টে যোগ করুন</button>
+                        </form>
+                        {% else %}
+                        <button type="button" class="btn btn-secondary w-100" disabled>স্টকে নেই</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="surface-card p-5 text-center text-muted">এখনো কোনো পণ্য যোগ করা হয়নি।</div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if products|length > 1 %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    (function () {
+        var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var options = {
+            loop: true,
+            speed: reducedMotion ? 0 : 650,
+            navigation: {
+                nextEl: ".hero-slider-next",
+                prevEl: ".hero-slider-prev"
+            },
+            pagination: {
+                el: ".hero-slider-pagination",
+                clickable: true
+            }
+        };
+        if (!reducedMotion) {
+            options.autoplay = { delay: 5000, disableOnInteraction: false };
+        }
+        new Swiper(".puffyHero", options);
+    })();
+</script>
+{% endif %}
+{% endblock %}

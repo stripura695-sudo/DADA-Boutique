@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}আপনার কার্ট — Dada Boys’ Wear{% endblock %}
+
+{% block content %}
+<header class="page-hero">
+    <div class="container reveal">
+        <p class="section-kicker mb-2">আপনার পছন্দ</p>
+        <h1 class="section-heading mb-0">শপিং ব্যাগ</h1>
+    </div>
+</header>
+
+<main class="container py-5">
+    <div class="row g-4 align-items-start">
+        <section class="col-lg-8 reveal">
+            <div class="surface-card p-3 p-md-4">
+                {% if cart_items %}
+                <div class="table-responsive">
+                    <table class="table cart-table mb-0">
+                        <thead>
+                            <tr><th>পণ্য</th><th>দাম</th><th>পরিমাণ</th><th>মোট</th><th><span class="visually-hidden">অ্যাকশন</span></th></tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                            <tr>
+                                <td class="fw-semibold">{{ item.product.name }}</td>
+                                <td>৳ {{ item.product.price }}</td>
+                                <td>
+                                    <form method="post" action="{% url 'core:update_cart_quantity' item.product.pk %}" class="d-flex gap-2">
+                                        {% csrf_token %}
+                                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="form-control form-control-sm" style="width: 76px" aria-label="{{ item.product.name }} পরিমাণ">
+                                        <button type="submit" class="btn btn-outline-dark btn-sm">আপডেট</button>
+                                    </form>
+                                    {% if item.quantity > item.product.stock %}
+                                    <small class="text-danger d-block mt-1">স্টক কম—Checkout-এর আগে পরিমাণ কমান</small>
+                                    {% endif %}
+                                </td>
+                                <td class="fw-semibold">৳ {{ item.line_total }}</td>
+                                <td>
+                                    <form method="post" action="{% url 'core:remove_from_cart' item.product.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-link text-danger p-0 text-nowrap">সরান</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="py-5 text-center">
+                    <span class="trust-icon mx-auto mb-3" aria-hidden="true">◇</span>
+                    <h2 class="h4 fw-bold">আপনার কার্ট খালি</h2>
+                    <p class="text-muted">পছন্দের জ্যাকেটটি খুঁজে নিয়ে এখানে যোগ করুন।</p>
+                    <a href="{% url 'core:home' %}" class="btn btn-dark px-4">পণ্য দেখুন</a>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <aside class="col-lg-4 reveal">
+            <div class="surface-card summary-card p-4">
+                <p class="section-kicker mb-2">অর্ডারের সারাংশ</p>
+                <h2 class="h4 fw-bold mb-4">মোট হিসাব</h2>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Subtotal</span><strong>৳ {{ total_price }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">ডেলিভারি</span><span class="small text-muted">Checkout-এ নিশ্চিত হবে</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fs-5 fw-bold mb-4">
+                    <span>পণ্যের মোট</span><span>৳ {{ total_price }}</span>
+                </div>
+                {% if cart_items and not cart_has_stock_issues %}
+                <a href="{% url 'core:checkout' %}" class="btn btn-dark btn-lg w-100">Checkout করুন <span aria-hidden="true">→</span></a>
+                {% elif cart_items %}
+                <button class="btn btn-secondary btn-lg w-100" disabled>আগে পরিমাণ আপডেট করুন</button>
+                {% else %}
+                <a href="{% url 'core:home' %}" class="btn btn-dark btn-lg w-100">কেনাকাটা শুরু করুন</a>
+                {% endif %}
+                <p class="small text-muted mt-3 mb-0">Cash on Delivery · WhatsApp-এ অর্ডার নিশ্চিতকরণ</p>
+            </div>
+        </aside>
+    </div>
+</main>
+{% endblock %}

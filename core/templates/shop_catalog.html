@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}All Collections — Dada Boys’ Wear{% endblock %}
+
+{% block content %}
+<header class="catalog-header">
+    <div class="container">
+        <p class="section-kicker mb-2">DADA BOYS’ WEAR · COLLECTION</p>
+        <h1 class="catalog-title">ALL COLLECTION</h1>
+        <p class="catalog-intro">ছেলেদের পোশাকের কালেকশন ঘুরে দেখুন এবং নিজের পছন্দের পণ্যটি খুঁজে নিন।</p>
+    </div>
+</header>
+
+<main class="container catalog-layout">
+    <aside class="catalog-sidebar">
+        <details class="catalog-filter-shell" open>
+            <summary class="catalog-filter-summary">FILTERS <span aria-hidden="true">⌄</span></summary>
+            <div class="catalog-filters">
+                <a class="sale-filter{% if sale_only %} is-selected{% endif %}" href="{{ sale_url }}">
+                    <span class="filter-check" aria-hidden="true">{% if sale_only %}✓{% endif %}</span>
+                    Sale items
+                </a>
+
+                {% for facet in facets %}
+                <details class="catalog-filter-group">
+                    <summary>{{ facet.label }} <span aria-hidden="true">+</span></summary>
+                    <div class="catalog-filter-options">
+                        {% for option in facet.options %}
+                        <a class="catalog-filter-option{% if option.selected %} is-selected{% endif %}" href="{{ option.url }}">
+                            <span class="filter-check" aria-hidden="true">{% if option.selected %}✓{% endif %}</span>
+                            <span>{{ option.value }}</span>
+                        </a>
+                        {% empty %}
+                        <p class="filter-empty">পণ্য যোগ করার সময় Admin থেকে এই তথ্য দিন।</p>
+                        {% endfor %}
+                    </div>
+                </details>
+                {% endfor %}
+
+                <details class="catalog-filter-group" open>
+                    <summary>Price Range <span aria-hidden="true">+</span></summary>
+                    <form class="price-filter-form" method="get" action="{% url 'core:shop_catalog' %}">
+                        {% for key, value in preserved_params %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                        {% endfor %}
+                        <label>
+                            <span>Min ৳</span>
+                            <input type="number" name="min_price" min="0" value="{{ min_price }}" placeholder="0">
+                        </label>
+                        <label>
+                            <span>Max ৳</span>
+                            <input type="number" name="max_price" min="0" value="{{ max_price }}" placeholder="Any">
+                        </label>
+                        <button class="btn btn-dark btn-sm" type="submit">Apply</button>
+                    </form>
+                </details>
+                <a class="clear-filters" href="{% url 'core:shop_catalog' %}">Clear all filters</a>
+            </div>
+        </details>
+    </aside>
+
+    <section class="catalog-results" aria-label="পণ্যের তালিকা">
+        <div class="catalog-toolbar">
+            <div>
+                <h2 class="catalog-results-title">{% if sale_only %}SALE COLLECTION{% else %}SHOP ALL{% endif %}</h2>
+                <p class="catalog-count">{{ products|length }} products</p>
+            </div>
+            <form class="catalog-sort" method="get" action="{% url 'core:shop_catalog' %}">
+                {% for key, value in preserved_params %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                {% endfor %}
+                {% if min_price %}<input type="hidden" name="min_price" value="{{ min_price }}">{% endif %}
+                {% if max_price %}<input type="hidden" name="max_price" value="{{ max_price }}">{% endif %}
+                <label for="catalogSort">Sort by</label>
+                <select id="catalogSort" name="sort">
+                    {% for option in sort_options %}
+                    <option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-outline-dark btn-sm" type="submit">Sort</button>
+            </form>
+        </div>
+
+        {% if filter_error %}
+        <p class="alert alert-warning" role="alert">{{ filter_error }}</p>
+        {% endif %}
+
+        <div class="catalog-product-grid">
+            {% for product in products %}
+            <article class="catalog-product-card">
+                <a class="catalog-product-image-wrap" href="{% url 'core:product_detail' product.pk %}" aria-label="{{ product.name }} বিস্তারিত">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                    {% else %}
+                    <span class="catalog-image-placeholder">DADA BOYS’ WEAR</span>
+                    {% endif %}
+                    {% if product.discount_percentage %}
+                    <span class="sale-badge">{{ product.discount_percentage }}% OFF</span>
+                    {% endif %}
+                    {% if not product.stock %}
+                    <span class="stock-badge">SOLD OUT</span>
+                    {% endif %}
+                </a>
+                <div class="catalog-product-info">
+                    <p class="catalog-product-category">{{ product.category }}</p>
+                    <h3><a href="{% url 'core:product_detail' product.pk %}">{{ product.name }}</a></h3>
+                    <div class="catalog-product-prices">
+                        <span>৳ {{ product.price }}</span>
+                        {% if product.discount_percentage %}
+                        <del>৳ {{ product.compare_at_price }}</del>
+                        {% endif %}
+                    </div>
+                    {% if product.stock %}
+                    <form method="post" action="{% url 'core:add_to_cart' product.pk %}">
+                        {% csrf_token %}
+                        <button class="catalog-add-button" type="submit">কার্টে যোগ করুন <span aria-hidden="true">→</span></button>
+                    </form>
+                    {% endif %}
+                </div>
+            </article>
+            {% empty %}
+            <div class="catalog-empty">
+                <h3>কোনো পণ্য পাওয়া যায়নি</h3>
+                <p>অন্য filter বেছে নিন অথবা সব পণ্য দেখুন।</p>
+                <a class="btn btn-dark" href="{% url 'core:shop_catalog' %}">সব পণ্য দেখুন</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

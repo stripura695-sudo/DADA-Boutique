@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+myeshop/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local database and uploaded media
+db.sqlite3
+db.sqlite3-*
+media/
+products/
+
+# Collected static files and local tooling
+staticfiles/
+.pytest_cache/
+.coverage
+htmlcov/
+.vscode/

@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fbfaf7">
+    <title>{% block title %}Dada Boys’ Wear — Boys’ Clothing{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/shop.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top shop-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:home' %}" aria-label="Dada Boys’ Wear home">
+                <img src="{% static 'core/images/dada-boys-wear-logo.png' %}" alt="Dada Boys’ Wear">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#shopNavigation" aria-controls="shopNavigation" aria-expanded="false" aria-label="মেনু খুলুন">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="shopNavigation">
+                <form class="search-form d-flex mx-lg-auto my-3 my-lg-0" method="get" action="{% url 'core:home' %}" role="search">
+                    <input class="form-control me-2" type="search" name="search" value="{{ query|default:'' }}" placeholder="জ্যাকেট খুঁজুন..." aria-label="পণ্য খুঁজুন">
+                    <button class="btn btn-outline-dark" type="submit">খুঁজুন</button>
+                </form>
+                <div class="d-flex align-items-center gap-2 ms-lg-auto mb-3 mb-lg-0">
+                    <a class="nav-link" href="{% url 'core:delivery_policy' %}">ডেলিভারি তথ্য</a>
+                    <a class="btn btn-dark btn-sm cart-link px-3" href="{% url 'core:cart_view' %}">কার্ট <span aria-hidden="true">→</span></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="category-nav" aria-label="পণ্য ও দোকানের নেভিগেশন">
+        <div class="container category-nav-inner">
+            <details class="mega-menu-details">
+                <summary class="category-nav-link">ছেলেদের কালেকশন <span class="menu-chevron" aria-hidden="true">⌄</span></summary>
+                <div class="mega-menu-panel">
+                    <div class="container">
+                        <div class="row g-4">
+                            <section class="col-md-6 col-lg-5">
+                                <h2 class="mega-menu-heading">সব পণ্য</h2>
+                                <div class="mega-product-list">
+                                    {% for product in shop_menu_products %}
+                                    <a class="mega-product-link" href="{% url 'core:product_detail' product.pk %}">
+                                        <span>{{ product.name }}</span>
+                                        <span class="mega-product-price">৳ {{ product.price }}</span>
+                                    </a>
+                                    {% empty %}
+                                    <p class="mega-menu-note">শিগগিরই নতুন পণ্য আসছে।</p>
+                                    {% endfor %}
+                                </div>
+                                <a class="mega-view-all" href="{% url 'core:shop_catalog' %}">সব পণ্য দেখুন <span aria-hidden="true">→</span></a>
+                            </section>
+                            <section class="col-md-3 col-lg-3">
+                                <h2 class="mega-menu-heading">কেনাকাটার তথ্য</h2>
+                                <ul class="mega-menu-links">
+                                    <li><a href="{% url 'core:about' %}">Dada Boys’ Wear সম্পর্কে</a></li>
+                                    <li><a href="{% url 'core:delivery_policy' %}">ডেলিভারি তথ্য</a></li>
+                                    <li><a href="{% url 'core:delivery_policy' %}#returns">রিটার্ন ও এক্সচেঞ্জ</a></li>
+                                    <li><a href="{% url 'core:privacy_policy' %}">গোপনীয়তা নীতি</a></li>
+                                </ul>
+                            </section>
+                            <section class="col-md-3 col-lg-4">
+                                <div class="mega-menu-feature">
+                                    <span class="section-kicker">সহায়তা প্রয়োজন?</span>
+                                    <h2>অর্ডার নিয়ে প্রশ্ন আছে?</h2>
+                                    <p>পণ্য, stock বা delivery সম্পর্কে WhatsApp-এ কথা বলুন।</p>
+                                    <a href="{{ shop_whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm">WhatsApp-এ যোগাযোগ <span aria-hidden="true">↗</span></a>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </details>
+            <a class="category-nav-link" href="{% url 'core:shop_catalog' %}">সব পণ্য</a>
+            <a class="category-nav-link" href="{% url 'core:delivery_policy' %}">ডেলিভারি</a>
+            <a class="category-nav-link" href="{% url 'core:contact' %}">যোগাযোগ</a>
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div class="container pt-3" aria-live="polite">
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags|default:'info' }}{% endif %} mb-2">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    <footer class="shop-footer">
+        <div class="container">
+            <div class="row g-4 g-lg-5 footer-main">
+                <section class="col-6 col-lg-3">
+                    <h2 class="footer-heading">তথ্য</h2>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'core:about' %}">Dada Boys’ Wear সম্পর্কে</a></li>
+                        <li><a href="{% url 'core:shop_catalog' %}">সব পণ্য</a></li>
+                        <li><a href="{% url 'core:contact' %}">যোগাযোগ</a></li>
+                    </ul>
+                </section>
+                <section class="col-6 col-lg-3">
+                    <h2 class="footer-heading">নীতিমালা</h2>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'core:delivery_policy' %}">ডেলিভারি তথ্য</a></li>
+                        <li><a href="{% url 'core:delivery_policy' %}#returns">রিটার্ন ও এক্সচেঞ্জ</a></li>
+                        <li><a href="{% url 'core:privacy_policy' %}">গোপনীয়তা নীতি</a></li>
+                    </ul>
+                </section>
+                <section class="col-12 col-lg-3">
+                    <h2 class="footer-heading">ক্রেতা সহায়তা</h2>
+                    <a class="footer-contact-number" href="{{ shop_whatsapp_url }}" target="_blank" rel="noopener noreferrer">+{{ shop_whatsapp_phone }}</a>
+                    <p class="footer-note">অর্ডার, পণ্য ও ডেলিভারি বিষয়ে WhatsApp-এ যোগাযোগ করুন।</p>
+                    <a class="footer-whatsapp" href="{{ shop_whatsapp_url }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp-এ Dada Boys’ Wear-এর সঙ্গে যোগাযোগ করুন">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2a9.82 9.82 0 0 0-8.42 14.9L2.3 22l5.24-1.37A9.93 9.93 0 0 0 12.04 22 10 10 0 0 0 22 12 9.91 9.91 0 0 0 12.04 2Zm0 18.18a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.1.81.83-3.01-.2-.32a8.15 8.15 0 1 1 6.95 3.84Zm4.48-6.1c-.25-.12-1.48-.73-1.71-.82-.23-.08-.4-.12-.56.13-.17.25-.64.82-.78.99-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-.1-.74-.67-1.24-1.5-1.39-1.76-.15-.25-.02-.39.11-.52.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.41-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.08s.89 2.41 1.01 2.58c.12.17 1.75 2.67 4.24 3.74.59.26 1.05.42 1.41.54.59.19 1.13.16 1.56.1.48-.07 1.48-.61 1.69-1.2.21-.59.21-1.09.15-1.2-.06-.1-.23-.17-.48-.29Z"/></svg>
+                    </a>
+                </section>
+                <section class="col-12 col-lg-3">
+                    <h2 class="footer-heading">অর্ডার ও পেমেন্ট</h2>
+                    <p class="footer-note">পেমেন্ট পণ্য হাতে পেয়ে Cash on Delivery-তে।</p>
+                    <span class="payment-badge"><span aria-hidden="true">৳</span> CASH ON DELIVERY</span>
+                    <p class="footer-note mt-3">অনলাইন কার্ড বা mobile banking payment এই মুহূর্তে নেই।</p>
+                </section>
+            </div>
+            <div class="footer-bottom">
+                <a class="footer-brand text-decoration-none" href="{% url 'core:home' %}" aria-label="Dada Boys’ Wear home">
+                    <img src="{% static 'core/images/dada-boys-wear-logo.png' %}" alt="Dada Boys’ Wear">
+                </a>
+                <p class="small mb-0">© {% now "Y" %} Dada Boys’ Wear. সর্বস্বত্ব সংরক্ষিত।</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'core/shop.js' %}" defer></script>
+    <script src="{% static 'core/menu.js' %}" defer></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
